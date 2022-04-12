@@ -7,6 +7,21 @@ class Amedas_tbl extends CI_Model
         $this->load->database();
     }
 
+    public function updateThander($block_no, $date)
+    {
+        // var_dump($block_no);
+        // var_dump($date);
+        // exit;
+        $data = array(
+            'thander_flag' => 1
+        );
+        return $this
+        ->db
+        ->where('block_no', $block_no)
+        ->where('date', $date)
+        ->update('amedas', $data);
+    }
+
     public function saveAmedas($amedas_data_array)
     {
         if(
@@ -71,5 +86,5 @@ class Amedas_tbl extends CI_Model
             ->group_by('date')
             ->get('amedas')
             ->result();
-    }
+        }
 }

@@ -10,6 +10,47 @@ class Amedas_model extends CI_Model
         $this->load->model('tables/Amedas_stations_tbl');
     }
 
+    public function thanderPatch($date)
+    {
+        $date_array = explode('-',$date);
+        $year = $date_array[0];
+        $month = $date_array[1];
+        $day = $date_array[2];
+        $amedas_capital_stations = $this->Amedas_stations_tbl->getAmedasCapitalStations();
+        foreach($amedas_capital_stations as $amedas_capital_station)
+        {
+            $prec_no = $amedas_capital_station->prec_no;
+            $block_no = $amedas_capital_station->block_no;
+
+            $html = file_get_contents("https://www.data.jma.go.jp/obd/stats/etrn/view/hourly_s1.php?prec_no=".$prec_no."&block_no=".$block_no."&year=".$year."&month=".$month."&day=".$day."&view=p1");
+            $dom = phpQuery::newDocument($html);
+            $j = 0;
+            $thander_flag = 0;
+            foreach($dom['table:eq(4) tr'] as $row)
+            {
+                $j++;
+                if($j < 2)
+                {
+                    continue;
+                }
+                $alt = pq($row)->find('td:eq(14) img')->attr('alt');
+                if($alt == "雷電")
+                {
+                    $thander_flag = 1;
+                    if($this->Amedas_tbl->updateThander($block_no, $date))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
+                }
+            }
+        }
+        return TRUE;
+    }
+
     public function scrapingAmedas($start_index, $batch_sise, $date)
     {
         // 配列の初期化
@@ -107,7 +148,7 @@ class Amedas_model extends CI_Model
             }
             else
             {
-                $html2 = file_get_contents("https://www.data.jma.go.jp/obd/stats/etrn/view/hourly_a1.php?prec_no=".$prec_no."&block_no=".$block_no."&year=".$year."&month=".$month."&day=".$day."&view=p1");
+                $html2 = file_get_contents("https://www.data.jma.go.jp/obd/stats/etrn/view/hourly_s1.php?prec_no=".$prec_no."&block_no=".$block_no."&year=".$year."&month=".$month."&day=".$day."&view=p1");
                 $dom2 = phpQuery::newDocument($html2);
                 $j = 0;
                 foreach($dom2['table:eq(4) tr'] as $row)
@@ -115,7 +156,7 @@ class Amedas_model extends CI_Model
                     $j++;
                     if($j < 2)
                     {
-                        continue;
+                        // continue;
                     }
                     $alt = pq($row)->find('td:eq(14) img')->attr('alt');
                     if($alt == "雷電")

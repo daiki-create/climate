@@ -15,6 +15,30 @@ class Scraping extends CI_Controller {
 		$this->load->model('Liden_model');
 	}
 
+	public function thanderPatch($year)
+	{
+		$date = read_file('../var/thander_patch/'.$year.'.txt');
+		$date_array = explode('-',$date);
+        $date_array_year = $date_array[0];
+		if($date_array_year == $year)
+		{
+			if($this->Amedas_model->thanderPatch($date))
+			{
+				$next_date = date('Y-m-d', strtotime('-1 day', strtotime($date)));
+				write_file('../var/thander_patch/'.$year.'.txt', $next_date, 'w');
+				log_message('debug', 'patch success!!!!!!!!!!!!!!!!!!!!!!!');
+				exit;
+			}
+		}
+		// メールで山崎に報告
+		$this->email->from('info@weather-info-ss.com', 'CLIMATE SYSTEM');
+		$this->email->to('6280ikiad@gmail.com');
+		$this->email->subject('落雷データ修正スクレイピング失敗');
+		$this->email->message('日付：'.$date);
+		$this->email->send();
+		log_message('debug', 'pacth FAILED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+	}
+
 	// 1分起きに実行
 	public function scrapingAmedasCronJob($batch_no)
 	{

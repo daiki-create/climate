@@ -7,6 +7,15 @@ class Amedas_stations_tbl extends CI_Model
         parent::__construct();
     }
 
+    public function getAmedasCapitalStations()
+    {
+        return $this
+            ->db
+            ->where('capital_flag', 1)
+            ->get('amedas_stations')
+            ->result();
+    }
+
     public function saveAmedasStations($amedas_stations_data)
     {
         if(
