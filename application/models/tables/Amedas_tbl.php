@@ -7,7 +7,7 @@ class Amedas_tbl extends CI_Model
         $this->load->database();
     }
 
-    public function updateThander($data)
+    public function updateThander($block_no, $date)
     {
         // var_dump($block_no);
         // var_dump($date);
@@ -19,7 +19,7 @@ class Amedas_tbl extends CI_Model
         ->db
         ->where('block_no', $block_no)
         ->where('date', $date)
-        ->update_batch('amedas', $data);
+        ->update('amedas', $data);
     }
 
     public function saveAmedas($amedas_data_array)

@@ -17,7 +17,6 @@ class Amedas_model extends CI_Model
         $month = $date_array[1];
         $day = $date_array[2];
         $amedas_capital_stations = $this->Amedas_stations_tbl->getAmedasCapitalStations();
-        $data = [];
         foreach($amedas_capital_stations as $amedas_capital_station)
         {
             $prec_no = $amedas_capital_station->prec_no;
@@ -37,24 +36,19 @@ class Amedas_model extends CI_Model
                 $alt = pq($row)->find('td:eq(14) img')->attr('alt');
                 if($alt == "雷電")
                 {
-                    $d = [
-                        "block_no" => $block_no,
-                        "date" => $date
-                    ];
-                    array_push($data, $d);
-                    break;
+                    $thander_flag = 1;
+                    if($this->Amedas_tbl->updateThander($block_no,$date))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
                 }
             }
         }
-        $thander_flag = 1;
-        if($this->Amedas_tbl->updateThander($data))
-        {
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
-        }
+        return TRUE;
     }
 
     public function scrapingAmedas($start_index, $batch_sise, $date)
