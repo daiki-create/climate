@@ -20,23 +20,30 @@ class Scraping extends CI_Controller {
 		$date = read_file('../var/thander_patch/'.$year.'.txt');
 		$date_array = explode('-',$date);
         $date_array_year = $date_array[0];
+		$block_no = "";
 		if($date_array_year == $year)
 		{
-			if($this->Amedas_model->thanderPatch($date))
+			$result = $this->Amedas_model->thanderPatch($date);
+			if($result == "updated")
 			{
 				$next_date = date('Y-m-d', strtotime('-1 day', strtotime($date)));
 				write_file('../var/thander_patch/'.$year.'.txt', $next_date, 'w');
 				log_message('debug', 'patch success!!!!!!!!!!!!!!!!!!!!!!!');
 				exit;
 			}
+			elseif(count($result) == 2)
+			{
+				$block_no = $result[0];
+				$date == $result[1];
+			}
 		}
 		// メールで山崎に報告
 		$this->email->from('info@weather-info-ss.com', 'CLIMATE SYSTEM');
 		$this->email->to('6280ikiad@gmail.com');
 		$this->email->subject('落雷データ修正スクレイピング失敗');
-		$this->email->message('日付：'.$date);
+		$this->email->message('日付：'.$date.'ブロック：'.$block_no);
 		$this->email->send();
-		log_message('debug', $date.'--pacth FAILED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		log_message('debug', $date.'ブロック：'.$block_no.'--pacth FAILED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	}
 
 	// 1分起きに実行

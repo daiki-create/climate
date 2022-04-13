@@ -43,12 +43,12 @@ class Amedas_model extends CI_Model
                     }
                     else
                     {
-                        return FALSE;
+                        return [$block_no, $date];
                     }
                 }
             }
         }
-        return TRUE;
+        return "updated";
     }
 
     public function scrapingAmedas($start_index, $batch_sise, $date)
