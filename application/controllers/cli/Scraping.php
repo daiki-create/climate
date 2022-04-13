@@ -36,7 +36,7 @@ class Scraping extends CI_Controller {
 		$this->email->subject('落雷データ修正スクレイピング失敗');
 		$this->email->message('日付：'.$date);
 		$this->email->send();
-		log_message('debug', 'pacth FAILED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		log_message('debug', $date.'--pacth FAILED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	}
 
 	// 1分起きに実行
