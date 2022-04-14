@@ -13,7 +13,7 @@ class Amedas_tbl extends CI_Model
         ->db
         ->where('date', $date)
         ->where('capital_flag', 0)
-        ->update('amedas', $amedas_data_array);
+        ->update_batch('amedas', $amedas_data_array);
     }
 
     public function updateThander($block_no, $date)
