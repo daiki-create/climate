@@ -11,8 +11,6 @@ class Amedas_tbl extends CI_Model
     {
         return $this
         ->db
-        ->where('date', $date)
-        ->where('capital_flag', 0)
         ->update_batch('amedas', $amedas_data_array);
     }
 
