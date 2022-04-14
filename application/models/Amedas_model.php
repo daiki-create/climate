@@ -37,14 +37,8 @@ class Amedas_model extends CI_Model
                         'wind_speed' => $wind_speed,
                         'wind_direction' => $wind_direction,
                     ];
-                    var_dump($amedas_data);
-                    exit;
                     // データベースアップデート
-                    if($this->Amedas_tbl->updateWind($amedas_data, $block_no, $date))
-                    {
-                        break;
-                    }
-                    else
+                    if(!$this->Amedas_tbl->updateWind($amedas_data, $block_no, $date))
                     {
                         return [$block_no, $date];
                     }
