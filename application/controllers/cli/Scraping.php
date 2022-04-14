@@ -26,7 +26,6 @@ class Scraping extends CI_Controller {
 			$result = $this->Amedas_model->windPatch($date);
 			if($result == "updated")
 			{
-				die("アップデート完了");
 				$next_date = date('Y-m-d', strtotime('-1 day', strtotime($date)));
 				write_file('../var/wind_patch/'.$year.'.txt', $next_date, 'w');
 				log_message('debug', 'patch success!!!!!!!!!!!!!!!!!!!!!!!');
