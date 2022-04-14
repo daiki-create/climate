@@ -30,7 +30,6 @@ class Amedas_model extends CI_Model
                 $tr_day = pq($row)->find('td:eq(0)')->text();
                 if($tr_day == $day)
                 {
-                    die('ここまでOK！！！！！！！！！！！！！！！！！！');
                     $wind_speed = pq($row)->find('td:eq(12)')->text();
                     $wind_direction = pq($row)->find('td:eq(13)')->text();                    
                     $wind_direction = trim($wind_direction, ")]");
@@ -38,6 +37,8 @@ class Amedas_model extends CI_Model
                         'wind_speed' => $wind_speed,
                         'wind_direction' => $wind_direction,
                     ];
+                    var_dump($amedas_data);
+                    exit;
                     // データベースアップデート
                     if($this->Amedas_tbl->updateWind($amedas_data, $block_no, $date))
                     {
