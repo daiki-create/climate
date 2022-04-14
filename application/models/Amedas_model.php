@@ -18,7 +18,8 @@ class Amedas_model extends CI_Model
         $month = $date_array[1];
         $day = $date_array[2];
         $amedas_stations = $this->Amedas_stations_tbl->getAmedasNotCapitalStations();
-        die('ここまでOK！！！！！！！！！！！！！！！！！！');
+        var_dump($amedas_stations);
+        exit;
         foreach($amedas_stations as $amedas_station)
         {
             $prec_no = $amedas_station->prec_no;
