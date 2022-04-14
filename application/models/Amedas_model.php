@@ -10,7 +10,7 @@ class Amedas_model extends CI_Model
         $this->load->model('tables/Amedas_stations_tbl');
     }
 
-    public function thanderPatch($date)
+    public function windPatch($date)
     {
         $amedas_data_array = [];
 
