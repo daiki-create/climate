@@ -18,6 +18,7 @@ class Amedas_model extends CI_Model
         $month = $date_array[1];
         $day = $date_array[2];
         $amedas_stations = $this->Amedas_stations_tbl->getAmedasNotCapitalStations();
+        die('ここまでOK！！！！！！！！！！！！！！！！！！');
         foreach($amedas_stations as $amedas_station)
         {
             $prec_no = $amedas_station->prec_no;
@@ -26,10 +27,8 @@ class Amedas_model extends CI_Model
             $html = file_get_contents("https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=".$prec_no."&block_no=".$block_no."&year=".$year."&month=".$month);            
             $dom = phpQuery::newDocument($html);
 
-            $i = 0;
             foreach($dom['table:eq(5) tr'] as $row)
             {
-                $i++;
                 $tr_day = pq($row)->find('td:eq(0)')->text();
                 if($tr_day == $day)
                 {

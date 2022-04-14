@@ -9,7 +9,6 @@ class Amedas_tbl extends CI_Model
 
     public function updateWind($amedas_data, $block_no, $data)
     {
-        die('ここまでOK');
         $data = array(
             'wind_speed' => $amedas_data['wind_speed'],
             'wind_direction' => $amedas_data['wind_direction']
