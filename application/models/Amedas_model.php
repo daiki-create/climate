@@ -27,10 +27,10 @@ class Amedas_model extends CI_Model
 
             foreach($dom['table:eq(5) tr'] as $row)
             {
-                die("ここまで");
                 $tr_day = pq($row)->find('td:eq(0)')->text();
                 if($tr_day == $day)
                 {
+                    die('ここまでOK！！！！！！！！！！！！！！！！！！');
                     $wind_speed = pq($row)->find('td:eq(12)')->text();
                     $wind_direction = pq($row)->find('td:eq(13)')->text();                    
                     $wind_direction = trim($wind_direction, ")]");
