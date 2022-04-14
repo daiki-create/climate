@@ -12,32 +12,41 @@ class Amedas_model extends CI_Model
 
     public function thanderPatch($date)
     {
+        $amedas_data_array = [];
+
         $date_array = explode('-',$date);
         $year = $date_array[0];
         $month = $date_array[1];
         $day = $date_array[2];
-        $amedas_capital_stations = $this->Amedas_stations_tbl->getAmedasCapitalStations();
-        foreach($amedas_capital_stations as $amedas_capital_station)
+        $amedas_capital_stations = $this->Amedas_stations_tbl->getAmedasNotCapitalStations();
+        foreach($amedas_stations as $amedas_station)
         {
-            $prec_no = $amedas_capital_station->prec_no;
-            $block_no = $amedas_capital_station->block_no;
+            $prec_no = $amedas_station->prec_no;
+            $block_no = $amedas_station->block_no;
 
-            $html = file_get_contents("https://www.data.jma.go.jp/obd/stats/etrn/view/hourly_s1.php?prec_no=".$prec_no."&block_no=".$block_no."&year=".$year."&month=".$month."&day=".$day."&view=p1");
+            $html = file_get_contents("https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=".$prec_no."&block_no=".$block_no."&year=".$year."&month=".$month);            
             $dom = phpQuery::newDocument($html);
-            $j = 0;
-            $thander_flag = 0;
-            foreach($dom['table:eq(4) tr'] as $row)
+
+            $i = 0;
+
+            foreach($dom['table:eq(5) tr'] as $row)
             {
-                $j++;
-                if($j < 2)
+                $i++;
+                $tr_day = pq($row)->find('td:eq(0)')->text();
+                if($tr_day == $day)
                 {
-                    continue;
-                }
-                $alt = pq($row)->find('td:eq(14) img')->attr('alt');
-                if($alt == "雷電")
-                {
-                    $thander_flag = 1;
-                    if($this->Amedas_tbl->updateThander($block_no,$date))
+                    $wind_speed = pq($row)->find('td:eq(12)')->text();
+                    $wind_direction = pq($row)->find('td:eq(13)')->text();                    
+                    $wind_direction = trim($wind_direction, ")]");
+                    $amedas_data = [
+                        'block_no' => $block_no,
+                        'wind_speed' => $wind_speed,
+                        'wind_direction' => $wind_direction,
+                        'date' => $year."-".$month."-".$day
+                    ];
+                    array_push($amedas_data_array, $amedas_data);
+                    // データベースアップデート
+                    if($this->Amedas_tbl->updateWind($amedas_data))
                     {
                         break;
                     }
@@ -118,8 +127,8 @@ class Amedas_model extends CI_Model
                     else
                     {
                         $pricipitation = pq($row)->find('td:eq(1)')->text();
-                        $wind_speed = pq($row)->find('td:eq(10)')->text();
-                        $wind_direction = pq($row)->find('td:eq(11)')->text();                    
+                        $wind_speed = pq($row)->find('td:eq(12)')->text();
+                        $wind_direction = pq($row)->find('td:eq(13)')->text();                    
                     }
                     $wind_direction = trim($wind_direction, ")]");
                     $amedas_data = [
