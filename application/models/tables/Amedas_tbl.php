@@ -7,7 +7,7 @@ class Amedas_tbl extends CI_Model
         $this->load->database();
     }
 
-    public function updateWind($amedas_data)
+    public function updateWind($amedas_data, $block_no, $data)
     {
         $data = array(
             'wind_speed' => $amedas_data['wind_speed'],
@@ -15,9 +15,9 @@ class Amedas_tbl extends CI_Model
         );
         return $this
         ->db
-        ->where('block_no', $amedas_data['block_no'])
-        ->where('date', $amedas_data['date'])
-        ->update_batch('amedas', $data);
+        ->where('block_no', $block_no)
+        ->where('date', $date)
+        ->update('amedas', $data);
     }
 
     public function updateThander($block_no, $date)

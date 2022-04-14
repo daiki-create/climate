@@ -12,7 +12,6 @@ class Amedas_model extends CI_Model
 
     public function windPatch($date)
     {
-        $amedas_data_array = [];
 
         $date_array = explode('-',$date);
         $year = $date_array[0];
@@ -28,7 +27,6 @@ class Amedas_model extends CI_Model
             $dom = phpQuery::newDocument($html);
 
             $i = 0;
-
             foreach($dom['table:eq(5) tr'] as $row)
             {
                 $i++;
@@ -39,14 +37,11 @@ class Amedas_model extends CI_Model
                     $wind_direction = pq($row)->find('td:eq(13)')->text();                    
                     $wind_direction = trim($wind_direction, ")]");
                     $amedas_data = [
-                        'block_no' => $block_no,
                         'wind_speed' => $wind_speed,
                         'wind_direction' => $wind_direction,
-                        'date' => $year."-".$month."-".$day
                     ];
-                    array_push($amedas_data_array, $amedas_data);
                     // データベースアップデート
-                    if($this->Amedas_tbl->updateWind($amedas_data))
+                    if($this->Amedas_tbl->updateWind($amedas_data, $block_no, $date))
                     {
                         break;
                     }
