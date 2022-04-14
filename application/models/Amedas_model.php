@@ -42,12 +42,10 @@ class Amedas_model extends CI_Model
                     // データベースアップデート
                     if(!$this->Amedas_tbl->updateWind($amedas_data, $block_no, $date))
                     {
-                        die("失敗");
                         return [$block_no, $date];
                     }
                     else
                     {
-                        die("ok.");
                         break;
                     }
                 }
