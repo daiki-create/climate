@@ -17,7 +17,7 @@ class Amedas_model extends CI_Model
         $month = $date_array[1];
         $day = $date_array[2];
         $amedas_stations = $this->Amedas_stations_tbl->getAmedasNotCapitalStations();
-        $amedas_stations_batch = array_slice($amedas_stations, 0, 250);
+        $amedas_stations_batch = array_slice($amedas_stations, 0, 205);
 
         foreach($amedas_stations_batch as $amedas_station)
         {
@@ -43,6 +43,10 @@ class Amedas_model extends CI_Model
                     if(!$this->Amedas_tbl->updateWind($amedas_data, $block_no, $date))
                     {
                         return [$block_no, $date];
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
