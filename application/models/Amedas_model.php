@@ -12,14 +12,11 @@ class Amedas_model extends CI_Model
 
     public function windPatch($date)
     {
-
         $date_array = explode('-',$date);
         $year = $date_array[0];
         $month = $date_array[1];
         $day = $date_array[2];
         $amedas_stations = $this->Amedas_stations_tbl->getAmedasNotCapitalStations();
-        var_dump($amedas_stations);
-        exit;
         foreach($amedas_stations as $amedas_station)
         {
             $prec_no = $amedas_station->prec_no;
@@ -30,6 +27,7 @@ class Amedas_model extends CI_Model
 
             foreach($dom['table:eq(5) tr'] as $row)
             {
+                die("ここまで");
                 $tr_day = pq($row)->find('td:eq(0)')->text();
                 if($tr_day == $day)
                 {
