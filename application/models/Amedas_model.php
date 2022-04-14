@@ -19,6 +19,8 @@ class Amedas_model extends CI_Model
         $amedas_stations = $this->Amedas_stations_tbl->getAmedasNotCapitalStations();
         $amedas_stations_batch = array_slice($amedas_stations, 0, 250);
 
+        $amedas_data_array = [];
+
         foreach($amedas_stations_batch as $amedas_station)
         {
             $prec_no = $amedas_station->prec_no;
@@ -39,19 +41,19 @@ class Amedas_model extends CI_Model
                         'wind_speed' => $wind_speed,
                         'wind_direction' => $wind_direction,
                     ];
-                    // データベースアップデート
-                    if(!$this->Amedas_tbl->updateWind($amedas_data, $block_no, $date))
-                    {
-                        return [$block_no, $date];
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    array_push($amedas_data_array, $amedas_data);
                 }
             }
         }
-        return "updated";
+        // データベースアップデート
+        if(!$this->Amedas_tbl->updateWind($amedas_data_array, $date))
+        {
+            return [$block_no, $date];
+        }
+        else
+        {
+            return "updated";
+        }
     }
 
     public function scrapingAmedas($start_index, $batch_sise, $date)
