@@ -209,6 +209,7 @@ function getData() {
               map.setMapTypeId( 'GrayScaleMap' );
               /*========= monochrome =========*/
   
+              var window_date_array = [];
               for (var i = 0; i < result.liden_data_array.length; i++) 
               {
                 const id = result.liden_data_array[i].id;
@@ -225,12 +226,18 @@ function getData() {
                   content: "<div>観測日:"+result.liden_data_array[i].date+"</div><div>北緯:"+result.liden_data_array[i].lat+"</div><div>東経:"+result.liden_data_array[i].lon+"</div>"
                 });
             
-                markerEvent(i);
-                function markerEvent(i) {
-                  marker[i].addListener('click', function() {
-                    infoWindow[i].open(map, marker[i]);
-                  });
+                if(window_date_array.indexOf(result.liden_data_array[i].date) == -1)
+                {
+                  window_date_array.push(result.liden_data_array[i].date);
+                  infoWindow[i].open(map, marker[i]);
                 }
+                
+                // markerEvent(i);
+                // function markerEvent(i) {
+                //   marker[i].addListener('click', function() {
+                //     infoWindow[i].open(map, marker[i]);
+                //   });
+                // }
               }
             }
           }
