@@ -232,12 +232,12 @@ function getData() {
                   infoWindow[i].open(map, marker[i]);
                 }
                 
-                // markerEvent(i);
-                // function markerEvent(i) {
-                //   marker[i].addListener('click', function() {
-                //     infoWindow[i].open(map, marker[i]);
-                //   });
-                // }
+                markerEvent(i);
+                function markerEvent(i) {
+                  marker[i].addListener('click', function() {
+                    infoWindow[i].open(map, marker[i]);
+                  });
+                }
               }
             }
           }
